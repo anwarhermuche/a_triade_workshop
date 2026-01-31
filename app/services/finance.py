@@ -35,6 +35,8 @@ class Finance:
 
     def __calc_statistics(self) -> dict:
         df = self.get_history()
+        if df.empty:
+            return {"error": "Empty dataframe"}
         df['Return'] = df['Close'].pct_change()
         df['Diff'] = df['Close'].diff()
 
@@ -65,6 +67,8 @@ class Finance:
 
     def get_report(self) -> str:
         stock_statistics = self.__calc_statistics()
+        if "error" in stock_statistics:
+            return f"No statistics found for {self.ticker}"
 
         return f"""
 # Estatísticas
